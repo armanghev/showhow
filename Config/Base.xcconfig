@@ -1,0 +1,22 @@
+// Shared settings for the app and the showhow-mcp bridge.
+
+MARKETING_VERSION = 0.1.0
+CURRENT_PROJECT_VERSION = 1
+MACOSX_DEPLOYMENT_TARGET = 14.0
+SWIFT_VERSION = 5.0
+ENABLE_HARDENED_RUNTIME = YES
+
+// Signing. The default signs to run locally (ad hoc). macOS ties Screen
+// Recording and Accessibility grants to the signature, so an ad hoc build
+// loses them on every rebuild. Copy Signing.local.xcconfig.example to
+// Signing.local.xcconfig and put your team id there to keep them.
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = -
+DEVELOPMENT_TEAM =
+
+// Sparkle stays off until a feed is set. "//" starts a comment in xcconfig
+// files, so write URLs as https:/$()/example.com/appcast.xml
+SPARKLE_FEED_URL =
+SPARKLE_PUBLIC_KEY =
+
+#include? "Signing.local.xcconfig"
