@@ -114,7 +114,7 @@ enum ImageEncoding {
 
     private static func encode(_ image: CGImage, type: UTType, properties: [CFString: Any]) throws -> Data {
         let data = NSMutableData()
-        guard let dest = CGImageDestinationCreateWithData(data, type.identifier as CFString, 1, nil) else { throw CaptureError.encodingFailed }
+        guard let dest = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, 1, nil) else { throw CaptureError.encodingFailed }
         CGImageDestinationAddImage(dest, image, properties as CFDictionary)
         guard CGImageDestinationFinalize(dest) else { throw CaptureError.encodingFailed }
         return data as Data

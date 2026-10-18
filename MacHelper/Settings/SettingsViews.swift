@@ -288,7 +288,7 @@ struct PrivacySettingsView: View {
                 HStack {
                     Button("Show logs in Finder") { NSWorkspace.shared.open(AppSettings.sessionsDirectory) }
                     Button("Delete logs now") {
-                        deleted = SessionController.shared.store.purge(olderThan: 0)
+                        deleted = SessionController.shared.store.deleteAll()
                         AppModel.shared.recent = SessionController.shared.store.recent(limit: 8)
                     }
                     if let deleted { Text("Deleted \(deleted).").font(DesignTokens.caption).foregroundStyle(.secondary) }

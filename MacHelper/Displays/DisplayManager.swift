@@ -59,7 +59,7 @@ final class DisplayManager {
     }
 
     var mouseScreen: NSScreen {
-        mouseDisplayID.flatMap(screen(for:)) ?? NSScreen.main ?? NSScreen.screens[0]
+        mouseDisplayID.flatMap(screen(for:)) ?? NSScreen.main ?? NSScreen.screens.first ?? NSScreen()
     }
 
     /// The display holding the frontmost app's focused window, if Accessibility allows reading it.

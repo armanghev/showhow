@@ -160,6 +160,16 @@ public final class SessionLogStore: @unchecked Sendable {
         }
         return removed
     }
+
+    /// Deletes every session log except those that became write-ups.
+    @discardableResult
+    public func deleteAll() -> Int {
+        var removed = 0
+        for log in recent(limit: .max) where log.writeupPath == nil {
+            if (try? fm.removeItem(at: folder(for: log.id))) != nil { removed += 1 }
+        }
+        return removed
+    }
 }
 
 /// Keeps the log for the running session up to date and persisted.

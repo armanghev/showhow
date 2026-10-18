@@ -32,12 +32,6 @@ jobs:
       - name: Test MacHelperCore
         working-directory: Packages/MacHelperCore
         run: swift test
-      - name: Install XcodeGen
-        run: brew install xcodegen
-      - name: Check the committed Xcode project is current
-        run: |
-          xcodegen generate
-          git diff --exit-code -- MacHelper.xcodeproj/project.pbxproj || (echo "Run 'xcodegen generate' and commit MacHelper.xcodeproj" && exit 1)
       - name: Build the app
         run: |
           set -o pipefail

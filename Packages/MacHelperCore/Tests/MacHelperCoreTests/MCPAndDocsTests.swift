@@ -172,6 +172,9 @@ final class MarkdownExporterTests: XCTestCase {
         try store.save(SessionLog(task: "new", sourceLabel: "You", mode: .guide, model: "m"))
         XCTAssertEqual(store.purge(olderThan: 7), 1)
         XCTAssertEqual(store.recent().map(\.task).sorted(), ["new", "old"])
+        // Delete now keeps only the documented session.
+        XCTAssertEqual(store.deleteAll(), 1)
+        XCTAssertEqual(store.recent().map(\.task), ["old"])
         try? FileManager.default.removeItem(at: root)
     }
 }

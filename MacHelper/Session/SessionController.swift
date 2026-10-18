@@ -626,12 +626,12 @@ final class SessionController: HandoffDelegate {
         for dir in candidates {
             let url = URL(fileURLWithPath: dir).appendingPathComponent("\(name).app")
             if FileManager.default.fileExists(atPath: url.path) {
-                NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration())
+                NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
                 return
             }
         }
         if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: name) {
-            NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration())
+            NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
         }
     }
 }
