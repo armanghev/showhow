@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-linux:
+    name: Core tests (Linux)
+    runs-on: ubuntu-latest
+    container: swift:6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test MacHelperCore
+        working-directory: Packages/MacHelperCore
+        run: swift test
+
+  app-macos:
+    name: Core tests and app build (macOS)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_16.4*.app /Applications/Xcode_16.3*.app 2>/dev/null | head -1)"
+          xcodebuild -version
+      - name: Test MacHelperCore
+        working-directory: Packages/MacHelperCore
+        run: swift test
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Check the committed Xcode project is current
+        run: |
+          xcodegen generate
+          git diff --exit-code -- MacHelper.xcodeproj/project.pbxproj || (echo "Run 'xcodegen generate' and commit MacHelper.xcodeproj" && exit 1)
+      - name: Build the app
+        run: |
+          set -o pipefail
+          xcodebuild -project MacHelper.xcodeproj -scheme MacHelper -configuration Debug \
+            -destination 'platform=macOS' -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO build | tee build/xcodebuild.log | grep -E "error:|warning: .*(deprecated|unavailable)|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" build/xcodebuild.log
+      - name: Check the bundle
+        run: |
+          APP="build/DerivedData/Build/Products/Debug/Mac Helper.app"
+          test -x "$APP/Contents/MacOS/Mac Helper"
+          test -x "$APP/Contents/MacOS/machelper-mcp"
+          /usr/libexec/PlistBuddy -c "Print :LSUIElement" "$APP/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleURLTypes:0:CFBundleURLSchemes:0" "$APP/Contents/Info.plist"
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-log
+          path: build/xcodebuild.log

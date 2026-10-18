@@ -16,9 +16,10 @@ public protocol HandoffDelegate: AnyObject {
     func whiteboardDraw(_ items: [WhiteboardItemSpec], clear: Bool) async -> Result<String, HandoffError>
 }
 
-public struct HandoffError: Error, Equatable {
+public struct HandoffError: Error, Equatable, LocalizedError {
     public var message: String
     public init(_ message: String) { self.message = message }
+    public var errorDescription: String? { message }
 }
 
 /// MCP over JSON-RPC 2.0: `initialize`, `tools/list`, `tools/call`, `ping`.

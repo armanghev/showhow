@@ -119,6 +119,11 @@ public enum KeyMapping {
     public struct Chord: Equatable, Sendable {
         public var keyCode: UInt16?
         public var modifiers: Modifiers
+
+        public init(keyCode: UInt16?, modifiers: Modifiers) {
+            self.keyCode = keyCode
+            self.modifiers = modifiers
+        }
     }
 
     public static func modifier(named name: String) -> Modifiers? {
