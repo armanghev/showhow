@@ -20,8 +20,11 @@ public enum URLCommand: Equatable, Sendable {
     public init?(url: URL) {
         guard url.scheme?.lowercased() == Self.scheme else { return nil }
         // showhow://walkthrough?... puts the command in host; showhow:walkthrough in path.
-        let command = (url.host ?? url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))).lowercased()
-        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        // URLComponents, because on Darwin URL.path is empty for the second form.
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let host = components?.host.flatMap { $0.isEmpty ? nil : $0 }
+        let command = (host ?? (components?.path ?? "").trimmingCharacters(in: CharacterSet(charactersIn: "/"))).lowercased()
+        let items = components?.queryItems ?? []
         func value(_ name: String) -> String? {
             items.first(where: { $0.name == name })?.value.flatMap { $0.isEmpty ? nil : $0 }
         }
