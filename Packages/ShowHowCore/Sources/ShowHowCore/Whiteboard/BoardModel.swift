@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// Colors the board offers, shared with the agent's whiteboard_draw tool.
 public enum BoardColor: String, Codable, CaseIterable, Sendable {

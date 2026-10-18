@@ -1,5 +1,8 @@
 import XCTest
 @testable import ShowHowCore
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 final class FakeHandoff: HandoffDelegate {
     var queued: [(String, String?, String)] = []

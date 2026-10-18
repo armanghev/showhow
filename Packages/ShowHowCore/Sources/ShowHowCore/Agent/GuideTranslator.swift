@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// Turns computer actions into on-screen instructions for Guide mode, where the
 /// user performs every step themselves.

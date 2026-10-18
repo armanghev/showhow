@@ -1,5 +1,8 @@
 import XCTest
 @testable import ShowHowCore
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 final class CoordinateMapperTests: XCTestCase {
     // A 1512x982 Retina laptop as main, and a 2560x1440 non-Retina display to its

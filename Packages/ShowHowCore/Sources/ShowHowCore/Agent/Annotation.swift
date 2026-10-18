@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// What the overlay can draw.
 public enum AnnotationKind: String, Codable, CaseIterable, Sendable {

@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// One guided step as it happened.
 public struct LogStep: Codable, Equatable, Sendable, Identifiable {

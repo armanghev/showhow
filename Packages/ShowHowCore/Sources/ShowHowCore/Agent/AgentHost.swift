@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// An image sent to Claude, with the mapping back to the display it shows.
 public struct Screenshot: Sendable {

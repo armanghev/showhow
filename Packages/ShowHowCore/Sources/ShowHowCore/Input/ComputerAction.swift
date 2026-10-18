@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 public enum MouseButton: String, Codable, Sendable { case left, right, middle }
 public enum ScrollDirection: String, Codable, Sendable { case up, down, left, right }

@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// Sends one request and returns the assistant message. `ClaudeClient` is the
 /// real implementation; tests script responses.

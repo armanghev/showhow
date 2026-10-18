@@ -1,5 +1,8 @@
 import XCTest
 @testable import ShowHowCore
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// Plays back scripted assistant messages and records every request.
 final class ScriptedSender: MessageSending {
