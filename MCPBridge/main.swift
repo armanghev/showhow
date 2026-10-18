@@ -1,21 +1,21 @@
-// machelper-mcp: a tiny stdio-to-HTTP bridge for Claude Desktop.
+// showhow-mcp: a tiny stdio-to-HTTP bridge for Claude Desktop.
 //
 // Claude Desktop starts local MCP servers as stdio commands. This bridge reads
-// newline-delimited JSON-RPC from stdin, forwards each message to Mac Helper's
+// newline-delimited JSON-RPC from stdin, forwards each message to ShowHow's
 // Streamable HTTP endpoint on 127.0.0.1 (port and token from
-// ~/Library/Application Support/MacHelper/mcp.json), and writes responses to
-// stdout. If Mac Helper is not running it tries to launch it once.
+// ~/Library/Application Support/ShowHow/mcp.json), and writes responses to
+// stdout. If ShowHow is not running it tries to launch it once.
 
 import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-import MacHelperCore
+import ShowHowCore
 
-let bundleID = "com.armanghev.MacHelper"
+let bundleID = "com.armanghev.ShowHow"
 
 func log(_ message: String) {
-    FileHandle.standardError.write(Data("machelper-mcp: \(message)\n".utf8))
+    FileHandle.standardError.write(Data("showhow-mcp: \(message)\n".utf8))
 }
 
 func writeLine(_ value: JSONValue) {
@@ -85,7 +85,7 @@ func forward(_ line: String) {
     for attempt in 0..<2 {
         guard let endpoint = loadEndpoint() else {
             if attempt == 0 { launchAppIfNeeded(); continue }
-            if !isNotification { writeLine(errorResponse(id: id, message: "Mac Helper is not running. Open Mac Helper and try again.")) }
+            if !isNotification { writeLine(errorResponse(id: id, message: "ShowHow is not running. Open ShowHow and try again.")) }
             return
         }
         switch post(body, to: endpoint) {
@@ -94,12 +94,12 @@ func forward(_ line: String) {
             if let response = try? JSONValue.decode(data) {
                 writeLine(response)
             } else if !isNotification {
-                writeLine(errorResponse(id: id, message: "Mac Helper returned HTTP \(status)."))
+                writeLine(errorResponse(id: id, message: "ShowHow returned HTTP \(status)."))
             }
             return
         case .failure(let error):
             if attempt == 0 { launchAppIfNeeded(); continue }
-            if !isNotification { writeLine(errorResponse(id: id, message: "Could not reach Mac Helper: \(error.localizedDescription)")) }
+            if !isNotification { writeLine(errorResponse(id: id, message: "Could not reach ShowHow: \(error.localizedDescription)")) }
             return
         }
     }

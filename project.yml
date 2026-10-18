@@ -1,5 +1,5 @@
 # Generate the Xcode project with:  xcodegen generate
-name: MacHelper
+name: ShowHow
 options:
   bundleIdPrefix: com.armanghev
   deploymentTarget:
@@ -9,8 +9,8 @@ options:
   generateEmptyDirectories: false
 
 packages:
-  MacHelperCore:
-    path: Packages/MacHelperCore
+  ShowHowCore:
+    path: Packages/ShowHowCore
   KeyboardShortcuts:
     url: https://github.com/sindresorhus/KeyboardShortcuts
     exactVersion: 2.4.0
@@ -19,42 +19,42 @@ packages:
     exactVersion: 2.9.6
 
 targets:
-  MacHelper:
+  ShowHow:
     type: application
     platform: macOS
     configFiles:
       Debug: Config/Debug.xcconfig
       Release: Config/Release.xcconfig
     sources:
-      - path: MacHelper
+      - path: ShowHow
         excludes:
           - "Resources/Info.plist"
     settings:
       base:
-        PRODUCT_NAME: Mac Helper
-        PRODUCT_MODULE_NAME: MacHelper
-        PRODUCT_BUNDLE_IDENTIFIER: com.armanghev.MacHelper
-        INFOPLIST_FILE: MacHelper/Resources/Info.plist
+        PRODUCT_NAME: ShowHow
+        PRODUCT_MODULE_NAME: ShowHow
+        PRODUCT_BUNDLE_IDENTIFIER: com.armanghev.ShowHow
+        INFOPLIST_FILE: ShowHow/Resources/Info.plist
         GENERATE_INFOPLIST_FILE: NO
-        CODE_SIGN_ENTITLEMENTS: MacHelper/Resources/MacHelper.entitlements
+        CODE_SIGN_ENTITLEMENTS: ShowHow/Resources/ShowHow.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         COMBINE_HIDPI_IMAGES: YES
         ENABLE_USER_SCRIPT_SANDBOXING: YES
         DEAD_CODE_STRIPPING: YES
     dependencies:
-      - package: MacHelperCore
-        product: MacHelperCore
+      - package: ShowHowCore
+        product: ShowHowCore
       - package: KeyboardShortcuts
       - package: Sparkle
       # The stdio bridge for Claude Desktop ships in Contents/MacOS.
-      - target: machelper-mcp
+      - target: showhow-mcp
         embed: true
         codeSign: true
         copy:
           destination: executables
 
-  machelper-mcp:
+  showhow-mcp:
     type: tool
     platform: macOS
     configFiles:
@@ -64,19 +64,19 @@ targets:
       - path: MCPBridge
     settings:
       base:
-        PRODUCT_NAME: machelper-mcp
-        PRODUCT_BUNDLE_IDENTIFIER: com.armanghev.MacHelper.mcp
+        PRODUCT_NAME: showhow-mcp
+        PRODUCT_BUNDLE_IDENTIFIER: com.armanghev.ShowHow.mcp
         SKIP_INSTALL: YES
     dependencies:
-      - package: MacHelperCore
-        product: MacHelperCore
+      - package: ShowHowCore
+        product: ShowHowCore
 
 schemes:
-  MacHelper:
+  ShowHow:
     build:
       targets:
-        MacHelper: all
-        machelper-mcp: all
+        ShowHow: all
+        showhow-mcp: all
     run:
       config: Debug
     archive:

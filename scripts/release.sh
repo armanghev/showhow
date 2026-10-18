@@ -1,26 +1,26 @@
 #!/bin/bash
-# Builds a signed, notarized DMG of Mac Helper.
+# Builds a signed, notarized DMG of ShowHow.
 #
 # Needs: a Developer ID Application certificate in your keychain, your team id
 # in Config/Signing.local.xcconfig, and a notarytool profile:
-#   xcrun notarytool store-credentials machelper-notary --apple-id you@example.com --team-id ABCDE12345
+#   xcrun notarytool store-credentials showhow-notary --apple-id you@example.com --team-id ABCDE12345
 #
 # Usage: scripts/release.sh [notary-profile]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PROFILE="${1:-machelper-notary}"
-ARCHIVE="dist/MacHelper.xcarchive"
+PROFILE="${1:-showhow-notary}"
+ARCHIVE="dist/ShowHow.xcarchive"
 EXPORT="dist/export"
-APP="$EXPORT/Mac Helper.app"
+APP="$EXPORT/ShowHow.app"
 VERSION=$(grep -E '^MARKETING_VERSION' Config/Base.xcconfig | awk '{print $3}')
-DMG="dist/MacHelper-$VERSION.dmg"
+DMG="dist/ShowHow-$VERSION.dmg"
 
 rm -rf dist && mkdir -p dist
 
 command -v xcodegen >/dev/null && xcodegen generate
 
-xcodebuild -project MacHelper.xcodeproj -scheme MacHelper -configuration Release \
+xcodebuild -project ShowHow.xcodeproj -scheme ShowHow -configuration Release \
   -destination 'generic/platform=macOS' -archivePath "$ARCHIVE" \
   CODE_SIGN_IDENTITY="Developer ID Application" CODE_SIGN_STYLE=Manual archive
 
@@ -38,7 +38,7 @@ xcodebuild -exportArchive -archivePath "$ARCHIVE" -exportPath "$EXPORT" -exportO
 
 codesign --verify --deep --strict --verbose=2 "$APP"
 
-hdiutil create -volname "Mac Helper" -srcfolder "$APP" -ov -format UDZO "$DMG"
+hdiutil create -volname "ShowHow" -srcfolder "$APP" -ov -format UDZO "$DMG"
 codesign --sign "Developer ID Application" --timestamp "$DMG"
 
 xcrun notarytool submit "$DMG" --keychain-profile "$PROFILE" --wait

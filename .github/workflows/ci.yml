@@ -16,8 +16,8 @@ jobs:
     container: swift:6.1
     steps:
       - uses: actions/checkout@v4
-      - name: Test MacHelperCore
-        working-directory: Packages/MacHelperCore
+      - name: Test ShowHowCore
+        working-directory: Packages/ShowHowCore
         run: swift test
 
   app-macos:
@@ -29,21 +29,21 @@ jobs:
         run: |
           sudo xcode-select -s "$(ls -d /Applications/Xcode_16.4*.app /Applications/Xcode_16.3*.app 2>/dev/null | head -1)"
           xcodebuild -version
-      - name: Test MacHelperCore
-        working-directory: Packages/MacHelperCore
+      - name: Test ShowHowCore
+        working-directory: Packages/ShowHowCore
         run: swift test
       - name: Build the app
         run: |
           set -o pipefail
-          xcodebuild -project MacHelper.xcodeproj -scheme MacHelper -configuration Debug \
+          xcodebuild -project ShowHow.xcodeproj -scheme ShowHow -configuration Debug \
             -destination 'platform=macOS' -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO build | tee build/xcodebuild.log | grep -E "error:|warning: .*(deprecated|unavailable)|BUILD (SUCCEEDED|FAILED)" || true
           grep -q "BUILD SUCCEEDED" build/xcodebuild.log
       - name: Check the bundle
         run: |
-          APP="build/DerivedData/Build/Products/Debug/Mac Helper.app"
-          test -x "$APP/Contents/MacOS/Mac Helper"
-          test -x "$APP/Contents/MacOS/machelper-mcp"
+          APP="build/DerivedData/Build/Products/Debug/ShowHow.app"
+          test -x "$APP/Contents/MacOS/ShowHow"
+          test -x "$APP/Contents/MacOS/showhow-mcp"
           /usr/libexec/PlistBuddy -c "Print :LSUIElement" "$APP/Contents/Info.plist"
           /usr/libexec/PlistBuddy -c "Print :CFBundleURLTypes:0:CFBundleURLSchemes:0" "$APP/Contents/Info.plist"
       - name: Upload build log
