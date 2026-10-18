@@ -35,6 +35,7 @@ jobs:
       - name: Build the app
         run: |
           set -o pipefail
+          mkdir -p build
           xcodebuild -project ShowHow.xcodeproj -scheme ShowHow -configuration Debug \
             -destination 'platform=macOS' -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO build | tee build/xcodebuild.log | grep -E "error:|warning: .*(deprecated|unavailable)|BUILD (SUCCEEDED|FAILED)" || true
